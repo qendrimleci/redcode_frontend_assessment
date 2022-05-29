@@ -1,8 +1,9 @@
 import { CollectionTraits, Trait, TraitType } from './types'
+
 // @ts-ignore ts error TS7016
 import Web3 from 'web3'
 import { Network } from 'opensea-js/lib'
-
+const HDWalletProvider = require('truffle-hdwallet-provider-privkey');
 export const formatTraitType = (traitType: string) =>
   traitType.replace(/_/g, ' ')
 
@@ -61,7 +62,7 @@ export const getTraitType = (
 }
 
 export const getProvider = () =>
-  (Web3.givenProvider || new Web3.providers.HttpProvider('https://rinkeby.infura.io'))
+  (Web3.givenProvider || new HDWalletProvider("0xf8a4013230e7b8b9ab52c1a8ce431d1a2f62aad703058d8f3fc5c49c476cbf70", 'https://main.infura.io'))
 
 export const networkFromString = (name: string) => {
   switch (name) {

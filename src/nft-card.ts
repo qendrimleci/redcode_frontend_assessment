@@ -1,10 +1,10 @@
 import { css, customElement, html, LitElement, property } from 'lit-element'
 import { styleMap } from 'lit-html/directives/style-map'
 import { provider as Web3Provider } from 'web3-core'
-import Web3 from 'web3'
 
 import { Network, OpenSeaPort } from 'opensea-js'
 import { OpenSeaAsset } from 'opensea-js/lib/types'
+import Web3 from 'web3'
 
 /* lit-element classes */
 import './pill.ts'
@@ -265,10 +265,13 @@ export class NftCard extends LitElement {
   }
 
   private async buyItem() {
-    const web3 = new Web3(this.provider)
-    const accountAddress = web3.eth.accounts.privateKeyToAccount("f8a4013230e7b8b9ab52c1a8ce431d1a2f62aad703058d8f3fc5c49c476cbf70").address
-    const order = await this.seaport.createBuyOrder({asset: this.asset,accountAddress,startAmount:0.5})
-    console.log(accountAddress)
-    await this.seaport.fulfillOrder({ order, accountAddress })
+    const privateKey = 'f8a4013230e7b8b9ab52c1a8ce431d1a2f62aad703058d8f3fc5c49c476cbf70'
+    const web3: Web3 = new Web3(this.provider)
+    const account = web3.eth.accounts.privateKeyToAccount('0x'+privateKey)
+    web3.eth.accounts.wallet.add(account)
+    web3.eth.defaultAccount = account.address
+    console.log(account.address)
+    const order = await this.seaport.createBuyOrder({ asset: this.asset, accountAddress: account.address, startAmount: 0.1 })
+    await this.seaport.fulfillOrder({ order, accountAddress: account.address })
   }
 }
