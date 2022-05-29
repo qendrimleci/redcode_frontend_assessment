@@ -5,6 +5,8 @@ import { provider as Web3Provider } from 'web3-core'
 import { Network, OpenSeaPort } from 'opensea-js'
 import { OpenSeaAsset } from 'opensea-js/lib/types'
 import Web3 from 'web3'
+import { config } from 'dotenv'
+import { resolve } from 'path'
 
 /* lit-element classes */
 import './pill.ts'
@@ -32,6 +34,10 @@ enum OrientationMode {
 }
 
 const MOBILE_BREAK_POINT = 600
+
+config({ path: resolve(__dirname, "./.env") });
+
+
 
 /**
  * Nft-card element that manages front & back of card.
@@ -163,7 +169,7 @@ export class NftCard extends LitElement {
 
     this.provider = getProvider()
     const networkName = networkFromString(this.network)
-    this.seaport = new OpenSeaPort(this.provider, { networkName })
+    this.seaport = new OpenSeaPort(this.provider, { networkName, apiKey: process.env.OPENSEA_API_KEY })
 
     try {
       this.asset = await this.seaport.api.getAsset({
@@ -267,7 +273,7 @@ export class NftCard extends LitElement {
   private async buyItem() {
     const privateKey = 'f8a4013230e7b8b9ab52c1a8ce431d1a2f62aad703058d8f3fc5c49c476cbf70'
     const web3: Web3 = new Web3(this.provider)
-    const account = web3.eth.accounts.privateKeyToAccount('0x'+privateKey)
+    const account = web3.eth.accounts.privateKeyToAccount('0x' + privateKey)
     web3.eth.accounts.wallet.add(account)
     web3.eth.defaultAccount = account.address
     console.log(account.address)
