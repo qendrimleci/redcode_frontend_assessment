@@ -8,3 +8,4 @@
   yarn run dev:demo
 ```
 
+Open your browser and then visit `http://localhost:9000/`  
